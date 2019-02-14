@@ -3,8 +3,8 @@ import classes from './burger.css'
 import BurgerIngredient from '../BurgerIngredients/ingredients'
 
 const burger = (props) => {
-
-    const transform = Object.keys(props.ingredients).map(
+    let transform = null;
+    transform = Object.keys(props.ingredients).map(
         key1 => {
             console.log(key1);
             return [...Array(props.ingredients[key1])].map((_,i)=> {
@@ -17,7 +17,7 @@ const burger = (props) => {
         });
         if(transform.length === 0)
         {
-            console.log("No Ingredients added. Plz add some ingredients");
+            transform = <p>No Ingredients added. Plz add some ingredients</p>;
         }
       return (
           <div className = {classes.Burger}>
