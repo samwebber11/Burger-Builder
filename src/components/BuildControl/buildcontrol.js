@@ -18,7 +18,7 @@ const build = (props) => (
         label = {ctrl.label}
         key = {ctrl.label}/>)}
         <button className = {classes.order}
-         purchase = {props.purchase}
+         disabled = {!props.purchase}
          onClick = {props.ordered}>Order Now</button>
     </div>
 )
