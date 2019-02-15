@@ -17,7 +17,9 @@ const build = (props) => (
         disabled = {props.disabledInfo[ctrl.type]}
         label = {ctrl.label}
         key = {ctrl.label}/>)}
-        <button className = {classes.order} purchase = {props.purchase}>Order Now</button>
+        <button className = {classes.order}
+         purchase = {props.purchase}
+         onClick = {props.ordered}>Order Now</button>
     </div>
 )
 

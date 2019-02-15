@@ -23,6 +23,7 @@ class BurgerBuilder extends Component {
         },
         totalPrice:0,
         purchased: false,
+        orderClicked: false,
     }
 
     updatePurchaseState = (ingredients) => {
@@ -62,6 +63,29 @@ class BurgerBuilder extends Component {
         });
         this.updatePurchaseState(updated);
     }
+    purchaseHandler = () => {
+        this.setState({orderClicked:true});
+    }
+
+    purchaseCancelHandler = () => {
+        this.setState({orderClicked:false});
+    }
+    // orderNowHandler = () => {
+    //     const purchase = this.state.purchased;
+    //     const updated = {...this.state.ingredients};
+    //     const update = Object.keys(updated).map((key) => {
+    //         return (key = 0)
+    //     });
+    //     if(purchase)
+    //     {
+    //         this.setState = ({
+    //             ingredients : updated,
+    //             purchased: false,
+    //             totalPrice: 0,
+    //             orderClicked: false,
+    //         })
+    //     }
+    // }
     render() {
         const disabledInfo = {
             ...this.state.ingredients
@@ -74,9 +98,10 @@ class BurgerBuilder extends Component {
         }
         return (
             <Aux>
-                <Modals>
+                <Modals show ={this.state.orderClicked}
+                modalsClosed = {this.purchaseCancelHandler}>
                     <OrderSummary ingredients = {this.state.ingredients}
-                    price = {this.state.totalPrice}
+                    price = {this.state.totalPrice.toFixed(2)}
                      />
                 </Modals>
                 <Burger ingredients={this.state.ingredients}/>
@@ -84,7 +109,8 @@ class BurgerBuilder extends Component {
                 removeIngredients = {this.removeIngredients}
                 disabledInfo = {disabledInfo}
                 prices = {this.state.totalPrice}
-                purchase = {this.state.purchased}/>
+                purchase = {this.state.purchased}
+                ordered = {this.purchaseHandler}/>
             </Aux>
         );
     }
