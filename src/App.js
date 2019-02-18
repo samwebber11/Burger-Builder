@@ -3,14 +3,18 @@ import './App.css';
 import Layout from './hoc/Layout/layout'
 import BurgerBuilder from './containers/BurgerBuilder'
 import CheckOut from './containers/CheckOut/checkout'
+import Switch from 'react-router-dom/Switch';
+import { Route } from 'react-router-dom';
 
 class App extends Component {
   render() {
     return (
       <div className="App">
       <Layout>
-        <BurgerBuilder />
-        <CheckOut />
+        <Switch>
+          <Route path="/" exact component = {BurgerBuilder} />
+          <Route path = "/checkout" exact component={CheckOut} />
+        </Switch>
       </Layout>
       </div>
     );
