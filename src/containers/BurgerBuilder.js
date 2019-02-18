@@ -87,26 +87,39 @@ class BurgerBuilder extends Component {
 
     purchaseContinueHandler = () => {
         // alert('You should continue');
-        this.setState({loading:true})
-        const order = {
-            ingredients:this.state.ingredients,
-            price:this.state.totalPrice,
-            customer: {
-                name:'Kumar Sambhav Jain',
-                address: {
-                    street:'22 raja garden',
-                    zipCode:'147021',
-                    country:'India',
-                },
-                email:'samjain15291@gmail.com'
-            },
-            deliveryMethod:'fastest',
+        // this.setState({loading:true})
+        // const order = {
+        //     ingredients:this.state.ingredients,
+        //     price:this.state.totalPrice,
+        //     customer: {
+        //         name:'Kumar Sambhav Jain',
+        //         address: {
+        //             street:'22 raja garden',
+        //             zipCode:'147021',
+        //             country:'India',
+        //         },
+        //         email:'samjain15291@gmail.com'
+        //     },
+        //     deliveryMethod:'fastest',
+        // }
+        // axios.post('/orders.json',order).then((response) => {
+        //     this.setState({loading:false,
+        //         orderClicked:false});
+        // }).catch(error => this.setState({loading:false,
+        //     orderClicked:false}));
+
+        const queryParams = [];
+        for(let i in this.state.ingredients)
+        {
+            queryParams.push(encodeURIComponent(i)+'='+encodeURIComponent(this.state.ingredients[i]));
         }
-        axios.post('/orders.json',order).then((response) => {
-            this.setState({loading:false,
-                orderClicked:false});
-        }).catch(error => this.setState({loading:false,
-            orderClicked:false}));
+        console.log(queryParams);
+        const queryString = queryParams.join('&');
+        console.log(queryString);
+        this.props.history.push({
+            pathname:'/checkout',
+            search:'?'+queryString,
+        });
     }
     // orderNowHandler = () => {
     //     const purchase = this.state.purchased;

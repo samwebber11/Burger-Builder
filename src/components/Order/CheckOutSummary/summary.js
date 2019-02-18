@@ -13,11 +13,11 @@ const summary = (props) => {
             />
             <Button
             btnTypes = 'Success'
-            clicked>
+            clicked = {props.continue}>
             Continue </Button>
             <Button
             btnTypes = 'Danger'
-            clicked>
+            clicked = {props.cancel}>
             Cancel </Button>
         </div>
     );
