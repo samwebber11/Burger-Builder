@@ -5,7 +5,7 @@ import NavItem from '../Navigation Bar/NavigationItem/navigationItem'
 const navBar = ()=> (
     <ul className = {classes.NavigationItems}>
     <NavItem link="/" active>Burger Builder</NavItem>
-    <NavItem link="/">CheckOut</NavItem>
+    <NavItem link="/orders">Orders</NavItem>
     </ul>
 );
 

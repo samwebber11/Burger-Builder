@@ -5,6 +5,7 @@ import BurgerBuilder from './containers/BurgerBuilder'
 import CheckOut from './containers/CheckOut/checkout'
 import Switch from 'react-router-dom/Switch';
 import { Route } from 'react-router-dom';
+import Orders from './containers/Orders/orders'
 
 class App extends Component {
   render() {
@@ -12,8 +13,9 @@ class App extends Component {
       <div className="App">
       <Layout>
         <Switch>
-          <Route path="/" exact component = {BurgerBuilder} />
-          <Route path = "/checkout" exact component={CheckOut} />
+          <Route path = "/" exact component = {BurgerBuilder} />
+          <Route path="/orders" component={Orders} />
+          <Route path = "/checkout" component={CheckOut} />
         </Switch>
       </Layout>
       </div>

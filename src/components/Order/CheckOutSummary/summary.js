@@ -4,6 +4,7 @@ import classes from './summary.css'
 import Button from '../../UI/Button/button'
 
 const summary = (props) => {
+    console.log(props.ingredients);
     return (
         <div className = {classes.Summary}>
             <h1>Hope You Like Your Burger...</h1>
