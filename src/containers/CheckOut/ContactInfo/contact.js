@@ -15,6 +15,10 @@ class Contact extends Component {
                     type:'text',
                     placeholder:'Your Name',
                 },
+                validation: {
+                    required:true,
+                },
+                valid:false,
                 value:'',
             },
             email:{
@@ -23,6 +27,10 @@ class Contact extends Component {
                     type:'email',
                     placeholder:'Your Email',
                 },
+                validation: {
+                    required:true,
+                },
+                valid:false,
                 value:'',
             },
             postalCode:{
@@ -31,6 +39,12 @@ class Contact extends Component {
                     type:'text',
                     placeholder:'Your Postal Code',
                 },
+                validation: {
+                    required:true,
+                    minLength:5,
+                    maxLength:5,
+                },
+                valid:false,
                 value:'',
             },
             street:{
@@ -39,6 +53,10 @@ class Contact extends Component {
                     type:'text',
                     placeholder:'Your Street',
                 },
+                validation: {
+                    required:true,
+                },
+                valid:false,
                 value:'',
             },
             deliveryMethod:{
@@ -86,6 +104,24 @@ class Contact extends Component {
         console.log(order,'here is order');
     }
 
+    inputValidity = (value,rules) => {
+        let valid = false;
+
+        if(rules.required)
+        {
+            valid = value.trim() !== '';
+        }
+        if(rules.minLength)
+        {
+            valid = value.length >= rules.minLength;
+        }
+        if(rules.maxLength)
+        {
+            valid = value.length <= rules.maxLength;
+        }
+        return valid;
+    }
+
     changedInputHandler = (event,inputIdentifier) => {
         const updatedForm = {
             ...this.state.orderForm
@@ -94,7 +130,9 @@ class Contact extends Component {
             ...updatedForm[inputIdentifier]
         }
         updatedValue.value = event.target.value;
+        updatedValue.valid = this.inputValidity(updatedValue.value,updatedForm.validation);
         updatedForm[inputIdentifier] = updatedValue;
+        console.log(updatedForm);
         this.setState({
             orderForm:updatedForm
         })
