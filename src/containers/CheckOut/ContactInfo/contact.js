@@ -3,13 +3,13 @@ import classes from './contact.css';
 import Button from '../../../components/UI/Button/button'
 import axios from '../../../axios'
 import Spinner from '../../../components/UI/Spinner/spinner'
+import Input from '../../../components/UI/Input/input'
 
 class Contact extends Component {
 
     state = {
         name:'',
         email:'',
-        phone:'',
         address: {
             postalCode:'',
             street:'',
@@ -54,10 +54,10 @@ class Contact extends Component {
         console.log('Hello world');
         let form = (
             <form>
-                    <input name="name" type="text" className = {classes.Input} placeholder="Enter your name" />
-                    <input name="email" type="text" className = {classes.Input} placeholder="Enter your email" />
-                    <input name="phone" type="text" className = {classes.Input} placeholder="Enter your Mobile-No" />
-                    <input name="address" type="text" className = {classes.Input} placeholder="Enter your Address" />
+                    <Input inputtype="input" name="name"       type="text"  placeholder="Enter your name"       />
+                    <Input inputtype="input" name="email"      type="email" placeholder="Enter your email"      />
+                    <Input inputtype="input" name="postalCode" type="text"  placeholder="Enter your PostalCode" />
+                    <Input inputtype="input" name="street"     type="text"  placeholder="Enter your Address"    />
                     <Button btnTypes="Success" clicked={this.orderHandler} >Order Now</Button>
                 </form>
         );
@@ -67,7 +67,7 @@ class Contact extends Component {
             form = <Spinner />
         }
         return(
-            <div className={classes.Contact}>
+            <div className = {classes.Contact}>
                 <h1>Enter Your Contact Details</h1>
                 {form}
             </div>
