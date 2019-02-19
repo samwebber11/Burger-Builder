@@ -18,7 +18,9 @@ class Contact extends Component {
                 validation: {
                     required:true,
                 },
+                touched:false,
                 valid:false,
+
                 value:'',
             },
             email:{
@@ -30,7 +32,9 @@ class Contact extends Component {
                 validation: {
                     required:true,
                 },
+                touched:false,
                 valid:false,
+
                 value:'',
             },
             postalCode:{
@@ -44,7 +48,9 @@ class Contact extends Component {
                     minLength:5,
                     maxLength:5,
                 },
+                touched:false,
                 valid:false,
+
                 value:'',
             },
             street:{
@@ -56,6 +62,8 @@ class Contact extends Component {
                 validation: {
                     required:true,
                 },
+                touched:false,
+
                 valid:false,
                 value:'',
             },
@@ -63,16 +71,23 @@ class Contact extends Component {
                 elementType:'select',
                 elementConfig:{
                     options:[
-                        {value:'fastest',displayValue:'Fastest'},
+                        {
+                            value:'fastest',
+                            displayValue:'Fastest'},
                         {
                             value:'cheapest',
                             displayValue:'Cheapest',
                         }
                     ]
-                }
+                },
+                value:'fastest',
+                validation:{},
+                valid:true,
+                touched:false,
             },
         },
         loading:false,
+        formValidity:false,
     }
 
     orderHandler = (event) => {
@@ -105,19 +120,19 @@ class Contact extends Component {
     }
 
     inputValidity = (value,rules) => {
-        let valid = false;
+        let valid = true;
 
         if(rules.required)
         {
-            valid = value.trim() !== '';
+            valid = value.trim() !== '' && valid;
         }
         if(rules.minLength)
         {
-            valid = value.length >= rules.minLength;
+            valid = value.length >= rules.minLength && valid;
         }
         if(rules.maxLength)
         {
-            valid = value.length <= rules.maxLength;
+            valid = value.length <= rules.maxLength && valid;
         }
         return valid;
     }
@@ -130,11 +145,19 @@ class Contact extends Component {
             ...updatedForm[inputIdentifier]
         }
         updatedValue.value = event.target.value;
-        updatedValue.valid = this.inputValidity(updatedValue.value,updatedForm.validation);
+        updatedValue.valid = this.inputValidity(updatedValue.value,updatedValue.validation);
+        updatedValue.touched = true;
         updatedForm[inputIdentifier] = updatedValue;
+
+        let formValidity = true;
+        for(let validity in updatedForm)
+        {
+            formValidity = updatedForm[validity].valid && formValidity;
+        }
         console.log(updatedForm);
         this.setState({
-            orderForm:updatedForm
+            orderForm:updatedForm,
+            formValidity:formValidity,
         })
     }
     render() {
@@ -147,6 +170,7 @@ class Contact extends Component {
                 config:this.state.orderForm[key],
             })
         }
+        console.log(this.state.formValidity);
         let form = (
             <form onSubmit = {this.orderHandler}>
 
@@ -157,11 +181,16 @@ class Contact extends Component {
                         elementtype = {key.config.elementType}
                         elementconfig = {key.config.elementConfig}
                         value = {key.config.value}
+                        invalid = {!key.config.valid}
+                        touched = {key.config.touched}
+                        shouldValidate = {key.config.validation}
                         changed = {(event) => this.changedInputHandler(event,key.id)}
+                        validInputType = {key.id}
                         />
                     ))
                 }
-                <Button btnTypes="Success">Order Now</Button>
+
+                <Button btnTypes="Success" disabled = {!this.state.formValidity}>Order Now</Button>
             </form>
         );
 
