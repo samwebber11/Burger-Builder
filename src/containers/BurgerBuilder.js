@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import Burger from '../components/Burger/burger'
 
-import * as actionTypes from '../store/action'
+import * as burgerBuilderActions from '../store/actions/index'
 import Aux from '../hoc/Aux/Aux'
 import Build from '../components/BuildControl/buildcontrol'
 import Modals from '../components/UI/modals/modals'
@@ -15,12 +15,12 @@ class BurgerBuilder extends Component {
     state = {
         orderClicked: false,
         loading:false,
-        error:false,
     }
 
 
     componentDidMount() {
         console.log(this.props);
+        this.props.onInitIngredients();
         // axios.get('https://burger-builder-b9a7a.firebaseio.com/ingredients.json')
         // .then((response) => {
         //     this.setState({
@@ -84,7 +84,7 @@ class BurgerBuilder extends Component {
             console.log(disabledInfo[keys]);
             disabledInfo[keys] = disabledInfo[keys] <= 0;
         }
-        let burgerLoader = this.state.error ? <p>Ingredients can not be loaded</p> : <Spinner />
+        let burgerLoader = this.props.error ? <p>Ingredients can not be loaded</p> : <Spinner />
         let orderSummary = null;
         if(this.props.ings !== null)
         {
@@ -127,19 +127,15 @@ const mapStateToProps = state => {
     return {
     ings:state.ingredients,
     price:state.price,
+    error:state.error,
 }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAddition: (ingName) => dispatch({
-            type:actionTypes.ADD_INGREDIENT,
-            ingredientName:ingName,
-        }),
-        onDeletion: (ingName) => dispatch({
-            type:actionTypes.REMOVE_INGREDIENT,
-            ingredientName:ingName,
-        }),
+        onAddition: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
+        onDeletion: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(burgerBuilderActions.initIngredient())
     }
 }
 
