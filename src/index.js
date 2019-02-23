@@ -5,15 +5,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import {createStore,combineReducers} from 'redux';
+import {createStore,combineReducers,applyMiddleware,compose} from 'redux';
 // import BurgerBuilder from './containers/BurgerBuilder'
 import rootReducer from './store/reducer'
 
-const store = createStore(rootReducer);
-
+const store = createStore(rootReducer,applyMiddleware(compose));
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 // ReactDOM.render(<BurgerBuilder />, document.getElementById('root'));
 const app = (
-    <Provider store = {store}>
+<Provider store = {store}>
 <BrowserRouter>
 <App />
 </BrowserRouter>
