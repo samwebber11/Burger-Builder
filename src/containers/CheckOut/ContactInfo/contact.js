@@ -5,6 +5,8 @@ import axios from '../../../axios'
 import Spinner from '../../../components/UI/Spinner/spinner'
 import Input from '../../../components/UI/Input/input'
 import { connect } from 'react-redux';
+import * as action from '../../../store/actions/index';
+import ErrorHandler from '../../../hoc/ErrorHandler/errorHandler'
 
 class Contact extends Component {
 
@@ -32,6 +34,7 @@ class Contact extends Component {
                 },
                 validation: {
                     required:true,
+                    isEmail:true,
                 },
                 touched:false,
                 valid:false,
@@ -48,6 +51,7 @@ class Contact extends Component {
                     required:true,
                     minLength:5,
                     maxLength:5,
+                    isNumeric:true,
                 },
                 touched:false,
                 valid:false,
@@ -87,15 +91,11 @@ class Contact extends Component {
                 touched:false,
             },
         },
-        loading:false,
         formValidity:false,
     }
 
     orderHandler = (event) => {
         event.preventDefault();
-        this.setState({
-            loading:true,
-        })
         let formElement = {};
         for(let identifier in this.state.orderForm)
         {
@@ -106,17 +106,7 @@ class Contact extends Component {
             price:this.props.price,
             customer:formElement,
         }
-        axios.post('/orders.json',order)
-        .then((response) => {
-            this.setState( {
-                loading:false,
-            });
-            this.props.history.push('/');
-        }).catch((error) => {
-            this.setState({
-                loading:false
-            });
-        });
+        this.props.onOrderBurger(order);
         console.log(order,'here is order');
     }
 
@@ -135,6 +125,17 @@ class Contact extends Component {
         {
             valid = value.length <= rules.maxLength && valid;
         }
+        if(rules.isEmail)
+        {
+            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+            valid = pattern.test(value) && valid;
+        }
+        if(rules.isNumeric)
+        {
+            const pattern = /^\d+$/;
+            valid = pattern.test(value) && valid;
+        }
+
         return valid;
     }
 
@@ -195,7 +196,7 @@ class Contact extends Component {
             </form>
         );
 
-        if(this.state.loading)
+        if(this.props.loading)
         {
             form = <Spinner />
         }
@@ -210,9 +211,16 @@ class Contact extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings:state.ingredients,
-        price:state.price,
+        ings:state.burgerBuilder.ingredients,
+        price:state.burgerBuilder.price,
+        loading:state.order.loading,
     }
 }
 
-export default connect(mapStateToProps)(Contact);
+const mapDispatchToProps = dispatch => {
+    return {
+        onOrderBurger: (orderData) => dispatch(action.purchaseBurger(orderData))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(ErrorHandler(Contact,axios));
