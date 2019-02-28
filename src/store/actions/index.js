@@ -12,4 +12,5 @@ export {
 
 export {
     authProcess,
+    authLogout,
 } from './auth';
