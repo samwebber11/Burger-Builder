@@ -6,6 +6,7 @@ const navBar = ()=> (
     <ul className = {classes.NavigationItems}>
     <NavItem link="/" active>Burger Builder</NavItem>
     <NavItem link="/orders">Orders</NavItem>
+    <NavItem link = "/auth">Authentication</NavItem>
     </ul>
 );
 
