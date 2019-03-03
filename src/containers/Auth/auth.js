@@ -6,7 +6,7 @@ import classes from './auth.css';
 import Button from '../../components/UI/Button/button';
 import { connect } from 'react-redux';
 import Spinner from '../../components/UI/Spinner/spinner';
-
+import { Redirect } from 'react-router-dom';
 
 class Auth extends Component {
 
@@ -47,6 +47,18 @@ class Auth extends Component {
         isSignUp:true,
     }
 
+    componentWillMount() {
+        console.log(this.props.authRedirect);
+    }
+
+    componentDidMount() {
+        console.log(this.props.building);
+        if(!this.props.building && this.props.authRedirect !== '/')
+        {
+            this.props.onSetRedirect();
+        }
+        console.log(this.props.authRedirect);
+    }
 
     inputValidity = (value,rules) => {
         let valid = true;
@@ -112,7 +124,15 @@ class Auth extends Component {
                 config: this.state.authForm[key]
             } );
         }
-
+        let redirection = null;
+        // console.log(this.props.onSetRedirect());
+        console.log(this.props.authRedirect," hello world");
+        console.log(this.props.isAuthenticated);
+        if(this.props.isAuthenticated)
+        {
+            console.log(this.props.authRedirect,'final');
+            redirection = <Redirect to={this.props.authRedirect} />
+        }
         let form = formElementsArray.map((key) => (
                 <Input
                     key = {key.id}
@@ -140,6 +160,7 @@ class Auth extends Component {
 
         return (
             <div className={classes.Auth}>
+            {redirection}
             {errorMessage}
                 <form onSubmit={this.submitHandler}>
                     {form}
@@ -157,12 +178,16 @@ const mapStateToProps = state => {
     return {
         loading:state.auth.loading,
         error:state.auth.error,
+        isAuthenticated:state.auth.token !== null,
+        building:state.burgerBuilder.building,
+        authRedirect:state.auth.redirectPath,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onAuth:(email,password,isSignUp) => dispatch(actionTypes.authProcess(email,password,isSignUp))
+        onAuth:(email,password,isSignUp) => dispatch(actionTypes.authProcess(email,password,isSignUp)),
+        onSetRedirect: () => dispatch(actionTypes.onRedirectPath('/')),
     }
 }
 

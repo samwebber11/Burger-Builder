@@ -19,7 +19,7 @@ const build = (props) => (
         key = {ctrl.label}/>)}
         <button className = {classes.order}
          disabled = {!props.purchase}
-         onClick = {props.ordered}>Order Now</button>
+         onClick = {props.ordered}>{ props.isAuth ? 'Order Now': 'Sign Up for Order' }</button>
     </div>
 )
 

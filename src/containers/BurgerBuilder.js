@@ -17,7 +17,6 @@ class BurgerBuilder extends Component {
         loading:false,
     }
 
-
     componentDidMount() {
         console.log(this.props);
         this.props.onInitIngredients();
@@ -30,7 +29,7 @@ class BurgerBuilder extends Component {
         //     this.setState({
         //         error:true
         //     })
-        // })
+        // });
     }
     updatePurchaseState = (ingredients) => {
         const sum = Object.keys(ingredients).map(key =>{
@@ -42,7 +41,14 @@ class BurgerBuilder extends Component {
     }
 
     purchaseHandler = () => {
-        this.setState({orderClicked:true});
+        if(this.props.isAuthenticated)
+        {
+            this.setState({orderClicked:true});
+        }
+        else{
+            this.props.onSetRedirectPath('/checkout');
+            this.props.history.push('/auth');
+        }
     }
 
     purchaseCancelHandler = () => {
@@ -97,6 +103,7 @@ class BurgerBuilder extends Component {
                     disabledInfo = {disabledInfo}
                     prices = {this.props.price}
                     purchase = {this.updatePurchaseState(this.props.ings)}
+                    isAuth = {this.props.isAuthenticated}
                     ordered = {this.purchaseHandler}/>
                 </Aux>
             );
@@ -129,6 +136,7 @@ const mapStateToProps = state => {
     ings:state.burgerBuilder.ingredients,
     price:state.burgerBuilder.price,
     error:state.burgerBuilder.error,
+    isAuthenticated: state.auth.token !== null
 }
 }
 
@@ -137,7 +145,8 @@ const mapDispatchToProps = dispatch => {
         onAddition: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
         onDeletion: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
         onInitIngredients: () => dispatch(burgerBuilderActions.initIngredient()),
-        onInitPurchase: () => dispatch(burgerBuilderActions.purchaseInit())
+        onInitPurchase: () => dispatch(burgerBuilderActions.purchaseInit()),
+        onSetRedirectPath: (path) => dispatch(burgerBuilderActions.onRedirectPath(path)),
     }
 }
 
