@@ -7,6 +7,7 @@ import Input from '../../../components/UI/Input/input'
 import { connect } from 'react-redux';
 import * as action from '../../../store/actions/index';
 import ErrorHandler from '../../../hoc/ErrorHandler/errorHandler'
+import { inputValidity } from '../../../store/global/validation';
 
 class Contact extends Component {
 
@@ -108,36 +109,6 @@ class Contact extends Component {
             userId: this.props.userId,
         }
         this.props.onOrderBurger(order,this.props.token);
-        console.log(order,'here is order');
-    }
-
-    inputValidity = (value,rules) => {
-        let valid = true;
-
-        if(rules.required)
-        {
-            valid = value.trim() !== '' && valid;
-        }
-        if(rules.minLength)
-        {
-            valid = value.length >= rules.minLength && valid;
-        }
-        if(rules.maxLength)
-        {
-            valid = value.length <= rules.maxLength && valid;
-        }
-        if(rules.isEmail)
-        {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            valid = pattern.test(value) && valid;
-        }
-        if(rules.isNumeric)
-        {
-            const pattern = /^\d+$/;
-            valid = pattern.test(value) && valid;
-        }
-
-        return valid;
     }
 
     changedInputHandler = (event,inputIdentifier) => {
@@ -148,7 +119,7 @@ class Contact extends Component {
             ...updatedForm[inputIdentifier]
         }
         updatedValue.value = event.target.value;
-        updatedValue.valid = this.inputValidity(updatedValue.value,updatedValue.validation);
+        updatedValue.valid = inputValidity(updatedValue.value,updatedValue.validation);
         updatedValue.touched = true;
         updatedForm[inputIdentifier] = updatedValue;
 
@@ -157,14 +128,14 @@ class Contact extends Component {
         {
             formValidity = updatedForm[validity].valid && formValidity;
         }
-        console.log(updatedForm);
+
         this.setState({
             orderForm:updatedForm,
             formValidity:formValidity,
         })
     }
     render() {
-        console.log('Hello world');
+
         const formElementArray = [];
         for(let key in this.state.orderForm)
         {
@@ -173,7 +144,7 @@ class Contact extends Component {
                 config:this.state.orderForm[key],
             })
         }
-        console.log(this.state.formValidity);
+
         let form = (
             <form onSubmit = {this.orderHandler}>
 

@@ -18,7 +18,6 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
         this.props.onInitIngredients();
         // axios.get('https://burger-builder-b9a7a.firebaseio.com/ingredients.json')
         // .then((response) => {
@@ -87,8 +86,7 @@ class BurgerBuilder extends Component {
         }
         for(let keys in disabledInfo)
         {
-            console.log(keys);
-            console.log(disabledInfo[keys]);
+
             disabledInfo[keys] = disabledInfo[keys] <= 0;
         }
         let burgerLoader = this.props.error ? <p>Ingredients can not be loaded</p> : <Spinner />

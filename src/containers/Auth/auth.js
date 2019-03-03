@@ -7,6 +7,7 @@ import Button from '../../components/UI/Button/button';
 import { connect } from 'react-redux';
 import Spinner from '../../components/UI/Spinner/spinner';
 import { Redirect } from 'react-router-dom';
+import { inputValidity } from '../../store/global/validation'
 
 class Auth extends Component {
 
@@ -60,42 +61,13 @@ class Auth extends Component {
         console.log(this.props.authRedirect);
     }
 
-    inputValidity = (value,rules) => {
-        let valid = true;
-
-        if(rules.required)
-        {
-            valid = value.trim() !== '' && valid;
-        }
-        if(rules.minLength)
-        {
-            valid = value.length >= rules.minLength && valid;
-        }
-        if(rules.maxLength)
-        {
-            valid = value.length <= rules.maxLength && valid;
-        }
-        if(rules.isEmail)
-        {
-            const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
-            valid = pattern.test(value) && valid;
-        }
-        if(rules.isNumeric)
-        {
-            const pattern = /^\d+$/;
-            valid = pattern.test(value) && valid;
-        }
-
-        return valid;
-    }
-
     changedInputHandler = (event, controlName) => {
         const updatedControls = {
             ...this.state.authForm,
             [controlName]: {
                 ...this.state.authForm[controlName],
                 value: event.target.value,
-                valid: this.inputValidity(event.target.value, this.state.authForm[controlName].validation),
+                valid: inputValidity(event.target.value, this.state.authForm[controlName].validation),
                 touched: true
             }
         };
